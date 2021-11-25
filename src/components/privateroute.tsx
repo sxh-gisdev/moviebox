@@ -1,28 +1,14 @@
-// import * as React from "react";
-// import { useContext } from "react";
-// import { Route, Navigate } from "react-router-dom";
-// import { AuthContext } from "../context/authContext";
+import * as React from "react";
+import { useContext } from "react";
+import { Route, Navigate, RouteProps } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 
-// const PrivateRoute = ({
-//   component: RouteComponent,
-//   ...rest
-// }: {
-//   component: any;
-// }) => {
-//   const { currentUser }: any = useContext(AuthContext);
-//   return (
-//     <Route
-//       {...rest}
-//       render ={(routeProps: any) =>
-//         !!currentUser ? (
-//           <RouteComponent {...routeProps} />
-//         ) : (
-//           <Navigate to={"/login"} />
-//         )
-//       }
-//     />
-//   );
-// };
+interface PrivateRouteProps extends RouteProps {}
 
-// export default PrivateRoute;
-export {};
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ ...rest }) => {
+  const currentUser = useContext(AuthContext);
+  if (currentUser === null) return <Navigate to={"/login"} />;
+  return <Route {...rest} />;
+};
+
+export default PrivateRoute;
