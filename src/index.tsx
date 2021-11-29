@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import App from "./App";
+import { AuthProvider } from "./components/auth/authContext";
 import store from "./redux/store";
-import { AuthProvider } from "./context/authContext";
 
 ReactDOM.render(
   <React.StrictMode>

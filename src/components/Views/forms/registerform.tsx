@@ -1,48 +1,35 @@
 import { Box, Button, TextField } from "@material-ui/core";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Wrapper } from "../styles/form.styles";
-import { AuthContext } from "../context/authContext";
-import { auth } from "./base";
+import { Wrapper } from "./styles/form.styles";
+import { AuthContext } from "../../auth/authContext";
+import { auth } from "../../auth/base";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-function RegisterForm() {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const user = useContext(AuthContext);
-  // const auth = getAuth();
+interface FormElements extends HTMLFormControlsCollection {
+  email: HTMLInputElement;
+  password: HTMLInputElement;
+}
 
-  //const [error, setError] = useState("");
+interface YourFormElement extends HTMLFormElement {
+  readonly elements: FormElements;
+}
+
+function RegisterForm() {
+  const user = useContext(AuthContext);
+
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // async function handleSubmit(e: any) {
-  //   e.preventDefault();
-  //   try {
-  //     setLoading(true);
-  //     register(emailRef.current.value, passwordRef.current.value);
-  //     navigate("/");
-  //     console.log(emailRef.current.value, passwordRef.current.value);
-  //   } catch {
-  //     setError("Failed to create account");
-  //     alert(error);
-  //   }
-  //   setLoading(false);
-  // }
-
-  const register = async (e: any) => {
+  const register = async (e: React.FormEvent<YourFormElement>) => {
     e.preventDefault();
     try {
       setLoading(true);
       await createUserWithEmailAndPassword(
         auth,
-        emailRef.current!.value,
-        passwordRef.current!.value
-      ).then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-      });
+        e.currentTarget.elements.email.value,
+        e.currentTarget.elements.password.value
+      );
       navigate("/");
     } catch (error) {
       console.error(error);
@@ -53,13 +40,13 @@ function RegisterForm() {
   return (
     <Wrapper>
       <h2>Register</h2>
+      <h3>{user?.email}</h3>
       <Box component="form" onSubmit={register}>
         <div>
           <TextField
             id="name"
             label="Name"
             type="text"
-            ref={nameRef}
             required
             className="inputbox"
           />
@@ -68,7 +55,6 @@ function RegisterForm() {
             id="email"
             label="Email"
             type="email"
-            ref={emailRef}
             required
             className="inputbox"
           />
@@ -77,7 +63,6 @@ function RegisterForm() {
             id="password"
             label="Password"
             type="password"
-            ref={passwordRef}
             required
             className="inputbox"
           />

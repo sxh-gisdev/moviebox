@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginForm from "./components/loginform";
-import PrivateRoute from "./components/privateroute";
-import RegisterForm from "./components/registerform";
-import ShowData from "./components/showdata";
+import LoginForm from "./components/Views/forms/loginform";
+import PrivateRoute from "./components/routes/privateroute";
+import RegisterForm from "./components/Views/forms/registerform";
+import ShowData from "./components/Views/home/showdata";
 
 function App() {
   return (
@@ -11,9 +11,15 @@ function App() {
       <Routes>
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/" element={<PrivateRoute />}>
-          <Route path="/" element={<ShowData />} />
-        </Route>
+        <Route
+          path="/"
+          element={
+            // <PrivateRoute>
+            <ShowData />
+            // </PrivateRoute>
+          }
+        />
+        {/* <Route path="/" element={<ShowData />} /> */}
       </Routes>
     </Router>
   );

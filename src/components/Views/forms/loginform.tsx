@@ -1,29 +1,37 @@
 import { Box, Button, TextField } from "@material-ui/core";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Wrapper } from "../styles/form.styles";
-import { auth } from "./base";
+import { Wrapper } from "./styles/form.styles";
+import { auth } from "../../auth/base";
+
+interface FormElements extends HTMLFormControlsCollection {
+  email: HTMLInputElement;
+  password: HTMLInputElement;
+}
+
+interface YourFormElement extends HTMLFormElement {
+  readonly elements: FormElements;
+}
 
 function LoginForm() {
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const signIn = async (e: any) => {
+  const signIn = async (e: React.FormEvent<YourFormElement>) => {
     e.preventDefault();
     try {
       setLoading(true);
       await signInWithEmailAndPassword(
         auth,
-        emailRef.current!.value,
-        passwordRef.current!.value
+        e.currentTarget.elements.email.value,
+        e.currentTarget.elements.password.value
       ).then((userCredential) => {
         const user = userCredential.user;
         console.log(user);
       });
-      navigate("/");
+
+      navigate("/", { replace: true });
     } catch (error) {
       console.error(error);
     }
@@ -39,7 +47,6 @@ function LoginForm() {
             id="email"
             label="Email"
             type="email"
-            ref={emailRef}
             required
             className="inputbox"
           />
@@ -47,7 +54,6 @@ function LoginForm() {
             id="password"
             label="Password"
             type="password"
-            ref={passwordRef}
             required
             className="inputbox"
           />

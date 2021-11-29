@@ -1,20 +1,24 @@
 import { Button } from "@material-ui/core";
 //import app from "./base";
 import { getAuth } from "firebase/auth";
+import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPosts } from "../redux/action";
+import { GetCharacters } from "../../../redux/actions/bbActions";
+import { AuthContext } from "../../auth/authContext";
 
 function ShowData() {
   const { posts, loading } = useSelector((state: any) => ({ ...state.posts }));
+  const user = useContext(AuthContext);
 
   const dispatch = useDispatch();
   return (
     <>
       <div>ShowData</div>
+      <h2>{user?.email}</h2>
       <Button
         variant="contained"
         color="primary"
-        onClick={() => dispatch(fetchPosts())}
+        onClick={() => dispatch(GetCharacters())}
       >
         Fetch Data
       </Button>
