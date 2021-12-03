@@ -2,7 +2,7 @@ import axios from "axios";
 import { Dispatch } from "redux";
 import {
   CharacterDispatchTypes,
-  CharacterInfo,
+  //CharacterInfo,
   CHARACTER_FAIL,
   CHARACTER_LOADING,
   CHARACTER_SUCCESS,
@@ -14,15 +14,14 @@ export const GetCharacters =
       dispatch({
         type: CHARACTER_LOADING,
       });
-      const res = await axios.get<CharacterInfo>(
+      const res = await axios.get(
         `https://www.breakingbadapi.com/api/characters/`
       );
-      const d = res.data;
 
       dispatch({
         type: CHARACTER_SUCCESS,
         payload: {
-          d,
+          characters: res.data,
         },
       });
     } catch (e) {

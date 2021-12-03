@@ -1,6 +1,6 @@
 import {
   CharacterDispatchTypes,
-  CharacterInfo,
+  //CharacterInfo,
   CHARACTER_FAIL,
   CHARACTER_LOADING,
   CHARACTER_SUCCESS,
@@ -8,11 +8,12 @@ import {
 
 interface DefaultStateI {
   loading: boolean;
-  character?: CharacterInfo;
+  character?: Array<any>;
 }
 
 const defaultState: DefaultStateI = {
   loading: false,
+  character: [],
 };
 
 const breakingReducer = (
