@@ -103,6 +103,7 @@ function Home() {
         <DataGridPro
           rows={getRows}
           columns={columns}
+          loading={getRows.length === 0}
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           rowsPerPageOptions={[10, 20, 40]}
