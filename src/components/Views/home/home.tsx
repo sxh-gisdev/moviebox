@@ -5,7 +5,7 @@ import {
   GridToolbarFilterButton,
 } from "@mui/x-data-grid-pro";
 import { getAuth } from "firebase/auth";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { GetCharacters } from "../../../redux/actions/bbActions";
@@ -14,25 +14,19 @@ import { AuthContext } from "../../auth/authContext";
 
 function Home() {
   // const [tableData, setTableData] = useState<Array<any>>([]);
+  const [getRows, setRows] = useState([]);
   const [pageSize, setPageSize] = useState<number>(10);
   const navigate = useNavigate();
   const characterState = useSelector((state: RootStore) => state.breaking);
   const user = useContext(AuthContext);
   const dispatch = useDispatch();
-  console.log(characterState);
   // const [firstRenderDone, setFirstRenderDone] = useState(false);
   useEffect(() => {
     dispatch(GetCharacters());
     //setFirstRenderDone(true);
   }, []);
 
-  function CustomToolbar() {
-    return (
-      <GridToolbarContainer>
-        <GridToolbarFilterButton />
-      </GridToolbarContainer>
-    );
-  }
+
 
   const char_id = characterState.character?.map((char) => char.char_id);
   const name = characterState.character?.map((char) => char.name);
@@ -41,7 +35,6 @@ function Home() {
   const portrayed = characterState.character?.map((char) => char.portrayed);
   const category = characterState.character?.map((char) => char.category);
   const status = characterState.character?.map((char) => char.status);
-
   const columns = [
     { field: "char_id", headerName: "ID", width: 100 },
     { field: "name", headerName: "Name", width: 300 },
@@ -53,27 +46,31 @@ function Home() {
   ];
 
   // const [rowdt, setrowdt] = useState<Array<any>>();
+  useEffect(() => {
+    characterState?.character?.map((char) => {
+      const objectValue = {
+        id: char?.char_id,
+        char_id: char?.char_id,
+        name: char?.name,
+        birthday: char?.birthday,
+        status: char?.status,
+        nickname: char?.nickname,
+        portrayed: char?.portrayed,
+        category: char?.category,
+      };
+      setRows((state)=>[objectValue, ...state]);
 
-  // useEffect(() => {
-  //   if (firstRenderDone) {
-  //     const rows = characterState?.character?.map((char) => {
-  //       return {
-  //         id: char?.char_id,
-  //         char_id: char?.char_id,
-  //         name: char?.name,
-  //         birthday: char?.birthday,
-  //         status: char?.status,
-  //         nickname: char?.nickname,
-  //         portrayed: char?.portrayed,
-  //         category: char?.category,
-  //       };
-  //     });
-  //     console.log(rows);
+    });
+  },[characterState?.character]);
+  console.log(getRows);
 
-  //     setrowdt(rows);
-  //   }
-  // }, [firstRenderDone]);
-
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarFilterButton />
+      </GridToolbarContainer>
+    );
+  }
   // console.log("rows", rowdt);
 
   const rows = [
@@ -104,7 +101,7 @@ function Home() {
       </div>
       <div style={{ width: "100%" }}>
         <DataGridPro
-          rows={rows}
+          rows={getRows}
           columns={columns}
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
@@ -115,7 +112,7 @@ function Home() {
             Toolbar: CustomToolbar,
           }}
           onRowDoubleClick={() => {
-            navigate(`/character/${rows?.map((row) => row?.id)}`, {
+            navigate(`/character/${getRows?.map((row) => row?.id)}`, {
               replace: true,
             });
           }}

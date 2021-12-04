@@ -22,7 +22,9 @@ function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route
           path="/"
-          element={noUser ? <Navigate to="/login" /> : <Home />}
+          element={
+            // noUser ? <Navigate to="/login" /> : 
+            <Home />}
         />
         <Route path="/character/:characterId" element={<CharacterCard />} />
       </Routes>
