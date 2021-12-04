@@ -112,8 +112,8 @@ function Home() {
           components={{
             Toolbar: CustomToolbar,
           }}
-          onRowDoubleClick={() => {
-            navigate(`/character/${getRows?.map((row) => row?.id)}`, {
+          onRowDoubleClick={ (row, dataIndex) => {
+            navigate(`/character/${row.id}`, {
               replace: true,
             });
           }}
